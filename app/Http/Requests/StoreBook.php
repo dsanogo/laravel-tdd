@@ -25,7 +25,7 @@ class StoreBook extends FormRequest
     {
         return [
             'title' => 'required|min:3',
-            'author' => 'required|min:5'
+            'author_id' => 'required'
         ];
     }
 }

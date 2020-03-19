@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Author;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,10 +16,10 @@ class AuthorManagementTest extends TestCase
      */
     public function an_author_can_be_created()
     {
-        $this->withoutExceptionHandling();
         $response = $this->post(route('authors.store'), $this->fakeAuthor());
         $this->assertCount(1, Author::all());
         $author = Author::first();
+        $this->assertInstanceOf(Carbon::class, $author->dob);
         $response->assertRedirect($author->showPath());
     }
     /**

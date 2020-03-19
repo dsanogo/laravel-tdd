@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Author;
 use App\Book;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -34,19 +35,19 @@ class BookManagementTest extends TestCase
     /**
      * @test
      */
-    public function book_author_is_required()
+    public function book_author_id_is_required()
     {
-        $this->post('books', array_merge($this->fakeBook(), ['author' => '']))
-                ->assertSessionHasErrors('author');
+        $this->post('books', array_merge($this->fakeBook(), ['author_id' => '']))
+                ->assertSessionHasErrors('author_id');
     }
 
     /**
      * @test
      */
-    public function book_title_and_author_are_required_to_store_book()
+    public function book_title_and_author_id_are_required_to_store_book()
     {
-        $this->post('books', array_merge($this->fakeBook(), ['title' => '', 'author' => '']))
-                    ->assertSessionHasErrors('title', 'author');
+        $this->post('books', array_merge($this->fakeBook(), ['title' => '', 'author_id' => '']))
+                    ->assertSessionHasErrors('title', 'author_id');
     }
 
     /**
@@ -58,30 +59,21 @@ class BookManagementTest extends TestCase
                         ->assertSessionHasErrors('title');
     }
 
-     /**
-     * @test
-     */
-    public function book_author_should_be_at_least_5_chars()
-    {
-        $this->post('books', array_merge($this->fakeBook(), ['author' => 'abcd']))
-                ->assertSessionHasErrors('author');
-    }
-
     /**
      * @test
      */
     public function a_book_can_be_updated()
     {        
+        $this->withoutExceptionHandling();
         $this->post('books', $this->fakeBook());
         
         $book = Book::first();
-        
+        $author = Author::first();
         $newTitle = "Cool updated Title";
         $newAuthor = "Davidson";
-
-        $response = $this->patch($book->updatePath(), array_merge($this->fakeBook(), ['title' => $newTitle, 'author' => $newAuthor]));
+        $response = $this->patch($book->updatePath(), array_merge($this->fakeBook(), ['title' => $newTitle, 'author_id' => $newAuthor]));
         $this->assertEquals($newTitle, Book::first()->title);
-        $this->assertEquals($newAuthor, Book::first()->author);
+        $this->assertEquals(2, Book::first()->author->id);
         $response->assertRedirect($book->fresh()->showPath());
     }
 
@@ -101,11 +93,30 @@ class BookManagementTest extends TestCase
         $response->assertRedirect(route('books.index'));
     }
 
+     /**
+     * @test
+     */
+    public function a_new_author_is_added_auto_after_new_book_creattion()
+    {
+        $this->withoutExceptionHandling();
+        $this->post($this->storeUrl(), $this->fakeBook());
+        $this->assertCount(1, Book::all());
+        $this->assertCount(1, Author::all());
+        $book = Book::first();
+        $author = Author::first();
+        $this->assertEquals($author->id, $book->author_id);
+    }
+
+
+    private function storeUrl()
+    {
+        return route('books.store');
+    }
     private function fakeBook()
     {
         return [
             'title' => 'Cool book title',
-            'author' => 'David'
+            'author_id' => 1
         ];
     }
 }

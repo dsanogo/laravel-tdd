@@ -6,7 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
-    protected $fillable = ['title', 'author'];
+    protected $fillable = ['title', 'author', 'author_id'];
+
+    public function setAuthorIdAttribute($authorId)
+    {
+        $this->attributes['author_id'] = (Author::firstOrCreate([
+            'name' => $authorId
+        ]))->id;
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
 
     public function showPath()
     {
