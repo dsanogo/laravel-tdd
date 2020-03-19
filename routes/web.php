@@ -22,5 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('customers', 'CustomerController@index');
 Route::post('customers', 'CustomerController@store');
 
+
 Route::resource('books', 'BookController');
 Route::resource('authors', 'AuthorController');
+Route::post('books/{book}', 'CheckoutBookController@checkout')->name('books.checkout');

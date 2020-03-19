@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->email == "admin@admin.com";
     }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }
