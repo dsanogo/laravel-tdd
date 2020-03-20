@@ -25,4 +25,5 @@ Route::post('customers', 'CustomerController@store');
 
 Route::resource('books', 'BookController');
 Route::resource('authors', 'AuthorController');
-Route::post('books/{book}', 'CheckoutBookController@checkout')->name('books.checkout');
+Route::post('books/{book}/checkout', 'CheckoutBookController@checkout')->name('books.checkout');
+Route::post('books/{book}/checkin', 'CheckoutBookController@checkin')->name('books.checkin');
