@@ -25,7 +25,15 @@ class StoreAuthor extends FormRequest
     {
         return [
             'name' => 'required',
-            'dob' => 'required'
+            'dob' => 'required|date_format:Y-m-d'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => "Please enter the author name",
+            'dob.required' => "Please enter the author DOB"
         ];
     }
 }

@@ -20,7 +20,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -30,7 +30,8 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        //
+        $author = new Author();
+        return view('authors.create')->withAuthor($author);
     }
 
     /**
@@ -51,9 +52,9 @@ class AuthorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Author $author)
     {
-        //
+        dd($author);
     }
 
     /**

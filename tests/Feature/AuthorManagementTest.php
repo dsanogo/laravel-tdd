@@ -34,6 +34,15 @@ class AuthorManagementTest extends TestCase
     /**
      * @test
      */
+    public function author_dob_is_should_be_format_yyy_mm_dd()
+    {
+        $this->post(route('authors.store', array_merge($this->fakeAuthor(), ['dob' => '1992-14-05'])))
+                ->assertSessionHasErrors('dob');
+    }
+
+    /**
+     * @test
+     */
     public function author_dob_is_required()
     {
         $this->post($this->storeUrl(), array_merge($this->fakeAuthor(), ['dob' => '']))
